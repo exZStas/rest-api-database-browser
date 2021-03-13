@@ -1,6 +1,5 @@
-package com.restdb.dbapi.dto;
+package com.restdb.dbapi.stored_db_connection.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data

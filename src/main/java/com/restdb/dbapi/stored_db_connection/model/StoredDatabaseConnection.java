@@ -1,8 +1,6 @@
-package com.restdb.dbapi.model;
+package com.restdb.dbapi.stored_db_connection.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 

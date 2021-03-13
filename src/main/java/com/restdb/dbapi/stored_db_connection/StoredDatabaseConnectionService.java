@@ -1,10 +1,16 @@
-package com.restdb.dbapi;
+package com.restdb.dbapi.stored_db_connection;
 
-import com.restdb.dbapi.model.StoredDatabaseConnection;
+import com.restdb.dbapi.DatabaseBrowserService;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import javax.sql.DataSource;
 
 import static java.util.Objects.nonNull;
 
@@ -14,6 +20,12 @@ public class StoredDatabaseConnectionService {
 
     @Autowired
     private StoredDatabaseConnectionRepository storedDbRepository;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Autowired
+    private DatabaseBrowserService databaseBrowserService;
 
     //todo for security reasons better transfer passwords and other sensitive data in byte array.
     // using pw as string here for simplifying things
@@ -39,5 +51,21 @@ public class StoredDatabaseConnectionService {
         storedDbConnection.setPassword(password);
 
         return storedDbRepository.save(storedDbConnection);
+    }
+
+    public void connectToStoredDbConnection(String hostName, Long port, String userName, String password) {
+        DataSource ds = DataSourceBuilder.create()
+                .username(userName)
+                .password(password)
+                .url(oracleDbUrlConstructor(hostName, port, "PROMDEV1"))
+                .driverClassName("oracle.jdbc.OracleDriver")
+                .build();
+
+        JdbcTemplate jdbcTemplate = (JdbcTemplate) applicationContext.getBean("jdbcCustom");
+        jdbcTemplate.setDataSource(ds);
+    }
+
+    private String oracleDbUrlConstructor(String hostName, Long port, String sid) {
+        return String.format("jdbc:oracle:thin:@%s:%s:%s", hostName, port, sid);
     }
 }

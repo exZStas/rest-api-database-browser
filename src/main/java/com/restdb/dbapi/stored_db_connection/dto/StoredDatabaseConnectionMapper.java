@@ -1,8 +1,7 @@
-package com.restdb.dbapi.dto;
+package com.restdb.dbapi.stored_db_connection.dto;
 
-import com.restdb.dbapi.model.StoredDatabaseConnection;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
 
 import java.util.List;
 

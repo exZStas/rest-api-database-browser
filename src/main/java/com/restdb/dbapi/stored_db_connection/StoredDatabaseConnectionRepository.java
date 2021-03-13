@@ -1,6 +1,6 @@
-package com.restdb.dbapi;
+package com.restdb.dbapi.stored_db_connection;
 
-import com.restdb.dbapi.model.StoredDatabaseConnection;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

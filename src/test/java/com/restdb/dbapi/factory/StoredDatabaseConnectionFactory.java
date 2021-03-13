@@ -1,7 +1,7 @@
 package com.restdb.dbapi.factory;
 
-import com.restdb.dbapi.model.StoredDatabaseConnection;
-import com.restdb.dbapi.StoredDatabaseConnectionRepository;
+import com.restdb.dbapi.stored_db_connection.StoredDatabaseConnectionRepository;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class StoredDatabaseConnectionFactory {

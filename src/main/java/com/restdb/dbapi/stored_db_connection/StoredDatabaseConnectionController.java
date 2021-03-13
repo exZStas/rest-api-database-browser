@@ -1,14 +1,15 @@
-package com.restdb.dbapi;
+package com.restdb.dbapi.stored_db_connection;
 
-import com.restdb.dbapi.dto.StoredDatabaseConnectionDto;
-import com.restdb.dbapi.dto.StoredDatabaseConnectionMapper;
-import com.restdb.dbapi.model.StoredDatabaseConnection;
+import com.restdb.dbapi.stored_db_connection.dto.StoredDatabaseConnectionDto;
+import com.restdb.dbapi.stored_db_connection.dto.StoredDatabaseConnectionMapper;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("database_connections")
 @RestController
@@ -40,6 +41,16 @@ public class StoredDatabaseConnectionController {
         List<StoredDatabaseConnection> storedDbConnectionsDto = storedDbConnectionMapper.storedDatabaseConnectionsToDtos(storedDbConnections);
 
         return new ResponseEntity(storedDbConnectionsDto, HttpStatus.OK);
+    }
+
+    @PostMapping("{storedDatabaseConnectionId}/connect")
+    public void connectToStoredDbConnection(@PathVariable(value = "storedDatabaseConnectionId") Long storedDbConnectionId) {
+        Optional<StoredDatabaseConnection> storedDbConnectionOptional = storedDbConnectionRepository.findById(storedDbConnectionId);
+        if(storedDbConnectionOptional.isPresent()) {
+            StoredDatabaseConnection storedDbConnection = storedDbConnectionOptional.get();
+            storedDbConnectionService.connectToStoredDbConnection(storedDbConnection.getHostName(), storedDbConnection.getPort(),
+                    storedDbConnection.getUsername(), storedDbConnection.getPassword());
+        }
     }
 
 }

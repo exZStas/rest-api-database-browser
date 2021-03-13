@@ -1,7 +1,8 @@
 package com.restdb.dbapi;
 
 import com.restdb.dbapi.factory.StoredDatabaseConnectionFactory;
-import com.restdb.dbapi.model.StoredDatabaseConnection;
+import com.restdb.dbapi.stored_db_connection.StoredDatabaseConnectionService;
+import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

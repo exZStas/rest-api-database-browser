@@ -4,7 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-import static com.restdb.dbapi.DatabaseConstants.DB_API_SEQUENCE;
+import static com.restdb.dbapi.constant.DatabaseConstants.DB_API_SEQUENCE;
 
 @Entity
 @Data

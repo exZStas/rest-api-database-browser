@@ -1,6 +1,6 @@
 package com.restdb.dbapi.stored_db_connection;
 
-import com.restdb.dbapi.DatabaseBrowserService;
+import com.restdb.dbapi.db_browser.DatabaseBrowserService;
 import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

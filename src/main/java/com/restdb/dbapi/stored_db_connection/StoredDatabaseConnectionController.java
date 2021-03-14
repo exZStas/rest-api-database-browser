@@ -1,7 +1,7 @@
 package com.restdb.dbapi.stored_db_connection;
 
+import com.restdb.dbapi.config.EntityToDtoMapper;
 import com.restdb.dbapi.stored_db_connection.dto.StoredDatabaseConnectionDto;
-import com.restdb.dbapi.stored_db_connection.dto.StoredDatabaseConnectionMapper;
 import com.restdb.dbapi.stored_db_connection.model.StoredDatabaseConnection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class StoredDatabaseConnectionController {
     private StoredDatabaseConnectionRepository storedDbConnectionRepository;
 
     @Autowired
-    private StoredDatabaseConnectionMapper storedDbConnectionMapper;
+    private EntityToDtoMapper storedDbConnectionMapper;
 
     @PostMapping
     public ResponseEntity<StoredDatabaseConnectionDto> addStoredDbConnection(@RequestBody StoredDatabaseConnectionDto storedDatabaseConnectionDto) {

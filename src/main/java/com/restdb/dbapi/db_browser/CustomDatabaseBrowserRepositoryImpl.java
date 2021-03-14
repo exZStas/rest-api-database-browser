@@ -1,5 +1,6 @@
 package com.restdb.dbapi.db_browser;
 
+import com.restdb.dbapi.db_browser.dto.TableDataPreview;
 import com.restdb.dbapi.db_browser.model.TableColumnsInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,7 +10,10 @@ import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.restdb.dbapi.constant.ConstraintType.getConstraintTypeByDefinition;
 
@@ -43,7 +47,7 @@ public class CustomDatabaseBrowserRepositoryImpl implements CustomDatabaseBrowse
                         "  (select acc.CONSTRAINT_NAME, acc.table_name, acc.column_name, ac.constraint_type" +
                         "  from ALL_CONS_COLUMNS acc, all_constraints ac" +
                         "  where acc.OWNER = (select user from dual)" +
-                        "  and ac.OWNER = (select user from dual)" +
+                        "  and ac.OWNER = acc.OWNER" +
                         "  and acc.CONSTRAINT_NAME not like '%SYS%' " +
                         "  and acc.constraint_name = ac.constraint_name" +
                         "  ) B on a.COLUMN_NAME=B.COLUMN_NAME and a.TABLE_NAME=B.TABLE_NAME" +
@@ -52,7 +56,26 @@ public class CustomDatabaseBrowserRepositoryImpl implements CustomDatabaseBrowse
                         " and a.table_name = ?" +
                         " order by column_id";
 
-        return jdbcTemplate.query(sql, new TableColumnsDataViewRowMapper(), tableName.toUpperCase());
+        return jdbcTemplate.query(sql, new TableColumnsDataViewRowMapper(), tableName);
+    }
+
+    public List<TableDataPreview> getTableDataPreview(String tableName) {
+        //jdbc's prepared statement designed to be sql injection resistant
+        String columnNamesSql = "select column_name " +
+                "from all_tab_cols " +
+                "where owner = (select user from dual) " +
+                "and table_name = ? and column_name not like '%SYS_%'";
+        List<String> columnNames = jdbcTemplate.query(columnNamesSql, (rs, rowNum) -> rs.getString(1), tableName);
+
+        //if columns names list is empty then whether table doesn't exist
+        //this check works against sql injection as well, so if there are columns
+        //then we can use table name in the code below
+        if(columnNames.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
+
+        String tableDataPreviewSql = String.format("select * from %s order by ID offset 0 rows fetch next 10 rows only", tableName);
+        return jdbcTemplate.query(tableDataPreviewSql, new TableDataPreviewRowMapper(columnNames));
     }
 
     private final class TableColumnsDataViewRowMapper implements RowMapper<TableColumnsInfoView> {
@@ -69,6 +92,26 @@ public class CustomDatabaseBrowserRepositoryImpl implements CustomDatabaseBrowse
             String constraintDefinition = rs.getString(6);
 
             return new TableColumnsInfoView(columnName, dataType, dataLength, nullable, constraintName, getConstraintTypeByDefinition(constraintDefinition));
+        }
+    }
+
+    private final class TableDataPreviewRowMapper implements RowMapper<TableDataPreview> {
+
+        private List<String> tableColumns;
+        public TableDataPreviewRowMapper(List<String> tableColumns) {
+            this.tableColumns = tableColumns;
+        }
+
+        @Override
+        public TableDataPreview mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Map<String, String> columnNameRecordMap = new LinkedHashMap<>();
+            for(int i = 1; i <= tableColumns.size(); i++) {
+                String record = rs.getString(i);
+                String columnName = tableColumns.get(i - 1);
+                columnNameRecordMap.put(columnName, record);
+            }
+
+            return new TableDataPreview(columnNameRecordMap);
         }
     }
 

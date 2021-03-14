@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("database_browser")
 @RestController
@@ -33,6 +34,12 @@ public class DatabaseBrowserController {
         List<TableColumnsInfoView> tableColumnsInfoView = databaseBrowserService.getTableColumnsInfoView(tableName);
         List<TableColumnsInfoDto> tableColumnsInfoDtos = entityToDtoMapper.tableColumnsInfoViewsToDtos(tableColumnsInfoView);
         return new ResponseEntity<>(tableColumnsInfoDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/tables/{tableName}/preview")
+    public ResponseEntity<Map<String, List<String>>> getTableDataPreview(@PathVariable(value = "tableName") String tableName) {
+        Map<String, List<String>> tableDataPreview = databaseBrowserService.getTableDataPreview(tableName);
+        return new ResponseEntity<>(tableDataPreview, HttpStatus.OK);
     }
 
     @GetMapping("/schemas")

@@ -54,6 +54,11 @@ public class StoredDatabaseConnectionService {
     }
 
     public void connectToStoredDbConnection(String hostName, Long port, String userName, String password) {
+        Assert.hasLength(hostName, "Hostname name can't be null or empty");
+        Assert.isTrue(port > 0, "Db port can't be null or less than zero");
+        Assert.hasLength(userName, "Username can't be null or empty");
+        Assert.hasLength(password, "Password can't be null or empty");
+
         DataSource ds = DataSourceBuilder.create()
                 .username(userName)
                 .password(password)

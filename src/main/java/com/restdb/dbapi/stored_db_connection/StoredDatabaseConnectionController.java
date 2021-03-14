@@ -49,7 +49,7 @@ public class StoredDatabaseConnectionController {
         if(storedDbConnectionOptional.isPresent()) {
             StoredDatabaseConnection storedDbConnection = storedDbConnectionOptional.get();
             storedDbConnectionService.connectToStoredDbConnection(storedDbConnection.getHostName(), storedDbConnection.getPort(),
-                    storedDbConnection.getUsername(), storedDbConnection.getPassword());
+                    storedDbConnection.getDatabaseName(), storedDbConnection.getUsername(), storedDbConnection.getPassword());
         }
     }
 

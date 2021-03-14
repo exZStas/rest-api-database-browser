@@ -8,6 +8,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 public class TableDataPreview {
+    //key - db column name, value - db record
     private Map<String, String> columnNameRecordMap;
 
 }

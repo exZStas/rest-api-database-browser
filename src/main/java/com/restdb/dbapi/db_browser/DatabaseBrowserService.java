@@ -15,7 +15,7 @@ import java.util.Map;
 public class DatabaseBrowserService {
 
     @Autowired
-    private CustomDatabaseBrowserRepository databaseBrowserRepository;
+    private DatabaseBrowserRepository databaseBrowserRepository;
 
     public List<String> getTables() {
         return databaseBrowserRepository.getTables();

@@ -18,7 +18,7 @@ import java.util.Map;
 import static com.restdb.dbapi.constant.ConstraintType.getConstraintTypeByDefinition;
 
 @Component
-public class CustomDatabaseBrowserRepositoryImpl implements CustomDatabaseBrowserRepository{
+public class DatabaseBrowserRepositoryImpl implements DatabaseBrowserRepository {
 
     @Autowired
     @Qualifier("jdbcCustom")
@@ -59,13 +59,17 @@ public class CustomDatabaseBrowserRepositoryImpl implements CustomDatabaseBrowse
         return jdbcTemplate.query(sql, new TableColumnsDataViewRowMapper(), tableName);
     }
 
-    public List<TableDataPreview> getTableDataPreview(String tableName) {
+    private List<String> getColumnNames(String tableName) {
         //jdbc's prepared statement designed to be sql injection resistant
         String columnNamesSql = "select column_name " +
                 "from all_tab_cols " +
                 "where owner = (select user from dual) " +
                 "and table_name = ? and column_name not like '%SYS_%'";
-        List<String> columnNames = jdbcTemplate.query(columnNamesSql, (rs, rowNum) -> rs.getString(1), tableName);
+        return jdbcTemplate.query(columnNamesSql, (rs, rowNum) -> rs.getString(1), tableName);
+    }
+
+    public List<TableDataPreview> getTableDataPreview(String tableName) {
+        List<String> columnNames = getColumnNames(tableName);
 
         //if columns names list is empty then whether table doesn't exist
         //this check works against sql injection as well, so if there are columns

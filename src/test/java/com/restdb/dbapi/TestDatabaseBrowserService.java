@@ -1,6 +1,6 @@
 package com.restdb.dbapi;
 
-import com.restdb.dbapi.db_browser.CustomDatabaseBrowserRepository;
+import com.restdb.dbapi.db_browser.DatabaseBrowserRepository;
 import com.restdb.dbapi.db_browser.DatabaseBrowserService;
 import com.restdb.dbapi.db_browser.dto.TableDataPreview;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +26,7 @@ public class TestDatabaseBrowserService {
     private DatabaseBrowserService databaseBrowserService;
 
     @Mock
-    private CustomDatabaseBrowserRepository databaseBrowserRepository;
+    private DatabaseBrowserRepository databaseBrowserRepository;
 
     private String id_1 = "1234";
     private String id_2 = "1237";

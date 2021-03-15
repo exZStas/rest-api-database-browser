@@ -5,7 +5,7 @@ import com.restdb.dbapi.db_browser.model.TableColumnsInfoView;
 
 import java.util.List;
 
-public interface CustomDatabaseBrowserRepository {
+public interface DatabaseBrowserRepository {
     List<String> getTables();
     List<String> getSchemas();
     List<TableColumnsInfoView> getTableColumns(String tableName);

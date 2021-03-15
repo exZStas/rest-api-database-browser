@@ -7,6 +7,7 @@ There are several endpoints worth mentioning:
 1) Save database connection
 ```
     POST localhost:8080/database_connections
+    Example post body:
     {
       "name": "his test02",                               // custom connection name
       "hostName": "prm-lsf-ota-ora-03.idm.promedico.nl",  // db host name
